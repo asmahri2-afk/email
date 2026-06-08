@@ -55,23 +55,21 @@ transporter.verify((error, success) => {
 // ROUTE
 // =====================
 app.post("/send", async (req, res) => {
-  console.log("====================================");
-  console.log("NEW REQUEST RECEIVED");
   console.log("BODY:", req.body);
 
   try {
-    const { to, subject, html } = req.body;
+    const { subject, html } = req.body;
 
-    // VALIDATION
-    if (!to || !subject || !html) {
-      console.log("MISSING FIELDS ❌");
+    const to = "asmahri1@gmail.com";
+
+    if (!subject || !html) {
       return res.status(400).json({
         success: false,
-        error: "Missing fields: to, subject, html"
+        error: "subject + html required"
       });
     }
 
-    console.log("SENDING EMAIL...");
+    console.log("Sending email to:", to);
 
     const info = await transporter.sendMail({
       from: process.env.SMTP_FROM,
@@ -80,8 +78,7 @@ app.post("/send", async (req, res) => {
       html
     });
 
-    console.log("EMAIL SENT ✅");
-    console.log("MESSAGE ID:", info.messageId);
+    console.log("SENT OK:", info.messageId);
 
     return res.json({
       success: true,
@@ -89,16 +86,12 @@ app.post("/send", async (req, res) => {
     });
 
   } catch (err) {
-    console.log("❌ SMTP ERROR CAUGHT");
-    console.log("NAME:", err.name);
-    console.log("MESSAGE:", err.message);
-    console.log("CODE:", err.code);
-    console.log("STACK:", err.stack);
+    console.log("SMTP ERROR:", err);
 
     return res.status(500).json({
       success: false,
       error: err.message,
-      code: err.code || null
+      code: err.code
     });
   }
 });
