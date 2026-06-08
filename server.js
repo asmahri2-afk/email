@@ -52,4 +52,4 @@ app.get("/", (req, res) => {
   res.send("SMTP API Running");
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, "0.0.0.0");
