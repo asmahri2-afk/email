@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
+    from: process.env.SMTP_FROM
   }
 });
 
@@ -41,6 +42,13 @@ app.post("/send", async (req, res) => {
   }
 });
 
+console.log({
+  HOST: process.env.SMTP_HOST,
+  PORT: process.env.SMTP_PORT,
+  USER: process.env.SMTP_USER,
+  FROM: process.env.SMTP_FROM,
+  PASS: process.env.SMTP_PASS ? "OK" : "MISSING"
+});
 app.get("/", (req, res) => {
   res.send("SMTP API Running");
 });
